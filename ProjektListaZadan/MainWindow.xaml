@@ -1,0 +1,97 @@
+﻿<Window x:Class="ProjektListaZadan.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjektListaZadan"
+        mc:Ignorable="d"
+        Title="MainWindow" MinHeight="800" MinWidth="1400">
+  
+        
+    <Grid>
+        <!--Dzieli grid na kolumny odpowiedniego rozmiaru, łatwiej edytować wygląd-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <!-- Kontener dla bocznego menu -->
+        <DockPanel Grid.Column="0" Background="#2e3344">
+            <!--Wszystkie kontrolki w tym panelu umieszczamy po kolei idąc od góry
+            umożliwia to StackPanel-->
+            <StackPanel>
+                <!-- Nagłówek bocznegomenu-->
+                <Label Content="Wybierz kategorie" FontSize="18" Foreground="White" Padding="10 25 10 25"
+                       HorizontalAlignment="Center"/>
+                <!-- Wyświetla wszystkei zadania-->
+                <Button Content="Wszystkie zadania" FontSize="18" Foreground="#2e3344" Background="Coral"
+                        Padding="10" Margin="0 10 0 10" Name="wszystkieZadania" Click="wszystkieZadania_Click"/>
+                <!-- Wyświetla prywatne zadania-->
+                <Button Content="Prywatne" FontSize="18" Foreground="#2e3344" Background="Coral"
+                        Padding="10" Margin="0 0 0 10" Name="zadaniaPrywatne" Click="zadaniaPrywatne_Click"/>
+                <!-- Wyświetla zadania z kategori praca-->
+                <Button Content="Praca" FontSize="18" Foreground="#2e3344" Background="Coral"
+                        Padding="10" Margin="0 0 0 10" Name="zadaniaPraca" Click="zadaniaPraca_Click"/>
+                <!-- Wyświetla zadania z kategori szkoła-->
+                <Button Content="Szkoła" FontSize="18" Foreground="#2e3344" Background="Coral"
+                        Padding="10" Margin="0 0 0 10" Name="zadaniaszkola" Click="zadaniaszkola_Click"/>
+                <!-- Wyświetla wykonane zadania-->
+                <Button Content="Wykonane" FontSize="18" Foreground="#2e3344" Background="Coral"
+                        Padding="10" Margin="0 0 0 10" Name="zadaniaWykonane" Click="zadaniaWykonane_Click"/>
+                <!-- Wyświetla niewykonane zadania-->
+                <Button Content="Nie wykonane" FontSize="18" Foreground="#2e3344" Background="Coral"
+                        Padding="10" Margin="0 0 0 10" Name="zadaniaNieWykonane" Click="zadaniaNieWykonane_Click"/>
+            </StackPanel>
+        </DockPanel>
+        <!-- Kontener dla głównego widoku, równierż od góry do dołu-->
+        <StackPanel Grid.Column="1" Background="#2e3344">
+            <!--Panel w którym dodajemy nowe zadanie-->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <!--Tutaj podajemy nazwę zadania-->
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
+                    <Label Content="Nazwa zadania" Margin="10" VerticalAlignment="Bottom" Foreground="White" FontSize="18"/>
+                    <TextBox Name="nazwaZadaniaTextBox" Text="" Height="35" Width="220" 
+                     />
+                </StackPanel>
+                <!-- Tutaj podajemy kategorię zadania-->
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
+                    <Label Content="Kategoria zadania" Margin="10" VerticalAlignment="Bottom" Foreground="White" FontSize="18"/>
+                    <TextBox Name="kategoriaZadaniaTextBox" Text="" Height="35" Width="220" 
+                     />
+                </StackPanel>
+                <!--Zapisujemy nowe zadanie-->
+                <Button Grid.Column="1" Padding="15" Margin="10" HorizontalAlignment="Right" 
+                    VerticalAlignment="Bottom" Background="Coral" FontSize="22" Width="220"
+                    Name="dodajZadanie" Content="Dodaj Zadanie" Foreground="#2e3344" Click="dodajZadanie_Click"/>
+            </StackPanel>
+            <!--DataGrid do prezentacji listy zadan-->
+            <DataGrid x:Name="listaZadanGrid" Grid.Column="1" AutoGenerateColumns="False"
+                  AlternatingRowBackground="Bisque" Background="#2e3344">
+            <!--Ustawiamy styl dla nagłówku datagrida-->
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="FontSize" Value="22"/>
+                    <Setter Property="Background" Value="#2e3344"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Height" Value="60"/>
+                    <Setter Property="Padding" Value="20 2 20 2"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <!--Definiujemy jakie elementy z modelu mają być wyświetlane w DataGrid-->
+            <DataGrid.Columns>
+                <!--Nazwa Zadania-->
+                <DataGridTextColumn Header="Nazwa Zadania" Binding="{Binding NazwaZadania, Mode=TwoWay}" 
+                                    FontSize="18" Width="*" Foreground="#2e3344" x:Name="nazwaZadania"/>
+                <!--CheckBox ze statusem zadania-->
+                <DataGridCheckBoxColumn Header="Status Zadania" Binding="{Binding XPath=StatusZadania, Mode=TwoWay}" 
+                                        x:Name="statusZadania"/>
+                <!--Nazwa Kategori-->
+                <DataGridTextColumn Header="Kategoria" Binding="{Binding KategoriaId}" 
+                                       x:Name="kategoriaZadania" />
+            </DataGrid.Columns>
+        </DataGrid>
+            
+        </StackPanel>
+    </Grid>
+        
+</Window>
