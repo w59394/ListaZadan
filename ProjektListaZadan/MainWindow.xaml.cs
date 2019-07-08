@@ -7,25 +7,20 @@ using System.Windows;
 namespace ProjektListaZadan
 {
     /// <summary>
-    /// Logika dla głównego okna
-    /// Odpowiada za odświerzanie widoków, pobieranie, tworzenie i edycje danych
+    /// Okno główne aplikacji - odpowiada za odświeżanie widoków, pobieranie, tworzenie i edycje danych
     /// </summary>
     public partial class MainWindow : Window
     {
         /// <summary>
-        /// Tworzy główne okno
+        /// Konstruktor - tworzy główne okno
         /// </summary>
         public MainWindow()
         {
-            /// Tworzy wszystkie komponenty
-            InitializeComponent();
-            /// Przypisuje wszystkie zadania do DataGrid listaZadanGrid, który je wyświetla
-            listaZadanGrid.ItemsSource = PobierzZadania();
+            InitializeComponent();            
+            listaZadanGrid.ItemsSource = PobierzZadania();// Przypisuje wszystkie zadania do DataGrid listaZadanGrid, który je wyświetla
         }
-        /// <summary>
-        /// Przechowuje listę zadań
-        /// </summary>
-        public List<Zadanie> mojeZadania = new List<Zadanie>();
+      
+        public List<Zadanie> mojeZadania = new List<Zadanie>();// Przechowuje listę zadań
 
         /// <summary>
         /// Pobiera listę wszystkich zadań
@@ -72,10 +67,8 @@ namespace ProjektListaZadan
         /// <param name="idKategori"></param>
         /// <returns>Zadania z kategori</returns>
         public List<Zadanie> PobierzZadaniaZKategori(int idKategori)
-        {
-            /// Otwiera połączenie z bazą danych
-            var db = new Context();
-
+        {            
+            var db = new Context();// Otwiera połączenie z bazą danych
             var mojeZadania = db.Zadanie.Where(x => x.KategoriaId == idKategori).Where(x => x.StatusZadania == false).AsEnumerable().ToList();
             return mojeZadania;
         }
@@ -149,34 +142,30 @@ namespace ProjektListaZadan
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void dodajZadanie_Click(object sender, RoutedEventArgs e)
-        {
-            /// Otwiera połączenie z bazą danych
-            var db = new Context();
+        {            
+            var db = new Context();// Otwiera połączenie z bazą danych
             Zadanie zadanie = new Zadanie();
+                        
+            zadanie.NazwaZadania = this.nazwaZadaniaTextBox.Text;// Przypisuje wartość z pola nazwaZadaiaTextBox, do nowego zadania
 
-            /// Przypisuje wartość z pola nazwaZadaiaTextBox, do nowego zadania
-            zadanie.NazwaZadania = this.nazwaZadaniaTextBox.Text;
-            /// Pobiera kategorie zadania
-            var intParse = this.kategoriaZadaniaTextBox.Text;
-            /// Konwertuje kategorie zadania na int - tak jest reprezentowana w bazie danych
-            zadanie.KategoriaId = Int32.Parse(intParse);
-            /// Ustawia status nowego zadania jako niewykonane
-            zadanie.StatusZadania = false;
-            /// Pobiera Id ostatniego zadania
-            var stareZadania = PobierzZadania().LastOrDefault();
-            /// Przypisuje Id ostatniego zadania
-            int stareId = stareZadania.ZadanieId;
-            /// Zwiększa stareId o 1 i przypisuje je do nowego zadania
-            zadanie.ZadanieId = stareId + 1;
-            /// Przydziela Id użytkownika
-            zadanie.UzytkownikId = 1;
-
-            /// Dodaje i zapisuje zadanie
-            db.Zadanie.Add(zadanie);
+            var intParse = this.kategoriaZadaniaTextBox.Text;// Pobiera kategorie zadania
+            
+            zadanie.KategoriaId = Int32.Parse(intParse);// Konwertuje kategorie zadania na int - tak jest reprezentowana w bazie danych
+            
+            zadanie.StatusZadania = false;// Ustawia status nowego zadania jako niewykonane
+            
+            var stareZadania = PobierzZadania().LastOrDefault();// Pobiera Id ostatniego zadania
+            
+            int stareId = stareZadania.ZadanieId;// Przypisuje Id ostatniego zadania
+            
+            zadanie.ZadanieId = stareId + 1;// Zwiększa stareId o 1 i przypisuje je do nowego zadania
+            
+            zadanie.UzytkownikId = 1;// Przydziela Id użytkownika
+            
+            db.Zadanie.Add(zadanie);// Dodaje i zapisuje zadanie
             db.SaveChanges();
-
-            /// Wyświetla wiadomość po dodaniu zadania
-            string wiadomosc = this.nazwaZadaniaTextBox.Text;
+                        
+            string wiadomosc = this.nazwaZadaniaTextBox.Text;// Wyświetla wiadomość po dodaniu zadania
             MessageBox.Show("Poprawnie dodano zadanie: " + wiadomosc);
         }
     }

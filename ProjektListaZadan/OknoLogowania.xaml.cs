@@ -4,22 +4,31 @@ using System.Windows;
 namespace ProjektListaZadan
 {
     /// <summary>
-    /// Logika dla okna logowania
+    /// Okno logowania aplikacji
     /// </summary>
     public partial class OknoLogowania : Window
-    {
+    {       
+        private Context db = new Context(); // Otwiera połączenie z bazą danych
         /// <summary>
-        /// Otwiera połączenie z bazą danych
-        /// </summary>
-        private Context db = new Context();
-        /// <summary>
-        /// Inicjalizuje okno logowania
+        /// Konstruktor - inicjalizuje okno logowania
         /// </summary>
         public OknoLogowania()
         {
-            InitializeComponent();
-            /// Ustawia bazę danych jako źródło danych dla okna
-            this.DataContext = new Context();
+            InitializeComponent();            
+            this.DataContext = new Context();// Ustawia bazę danych jako źródło danych dla okna
+        }
+        /// <summary>
+        /// Sprawdza dostęp do konta administratora
+        /// </summary>
+        /// <param name="login"></param>
+        /// <param name="haslo"></param>
+        /// <returns></returns>
+        public static bool SprawdzUzytkownika(string login, string haslo)
+        {
+            if (login == "admin" && haslo == "admin")
+                return true;
+            else
+                return false;
         }
 
         /// <summary>
@@ -28,38 +37,33 @@ namespace ProjektListaZadan
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void buttonZalogujSie_Click(object sender, RoutedEventArgs e)
-        {
-            /// Pobiera użytkownika, którego dane są zgodne z podanymi podczas logowania
-            var uzytkownik = db.Uzytkownik.AsEnumerable().Where(x => x.Email == textBoxNazwaUzytkownika.Text).ToList().FirstOrDefault();
-            /// Jeślinie wpisano prosi o wprowadzenie go
-            if (textBoxHaslo == null)
+        {            
+            var uzytkownik = db.Uzytkownik.AsEnumerable().Where(x => x.Email == textBoxNazwaUzytkownika.Text).ToList().FirstOrDefault();// Pobiera użytkownika, którego dane są zgodne z podanymi podczas logowania
+                                                                                                                                /// Jeślinie wpisano prosi o wprowadzenie go
+            if (SprawdzUzytkownika(textBoxNazwaUzytkownika.Text, textBoxHaslo.Password))
+            {                
+                MainWindow mainWindow = new MainWindow();// Tworzy okno z listą zadań                
+                mainWindow.Show();// Otwiera nowe okno                
+                this.Close();// Zamyka okno logowania
+            }
+            else if (textBoxHaslo == null)
             {
                 MessageBox.Show("Podaj hasło");
-            }
-            /// Jeśli nie ma takiego użytkownika informuje o tym
-            else if (uzytkownik == null)
+            }            
+            else if (uzytkownik == null)// Jeśli nie ma takiego użytkownika informuje o tym
             {
                 MessageBox.Show("Nie ma takiego użytkownika");
-            }
-            /// Jeśli wprowadzono błędne hasło prosi o podanie hasła
-            else if (uzytkownik.Haslo != textBoxHaslo.Password)
+            }            
+            else if (uzytkownik.Haslo != textBoxHaslo.Password)// Jeśli wprowadzono błędne hasło prosi o podanie hasła
             {
                 MessageBox.Show("Błędne hasło");
-            }
-            /// Jeśli wszystkie warunki zostały spełnione, loguje użytkownika i otwiera okno z listą zadań
+            }            
             else
-            {
-                /// Tworzy okno z listą zadań
-                MainWindow mainWindow = new MainWindow();
-                /// Otwiera nowe okno
-                mainWindow.Show();
-                /// Zamyka okno logowania
-                this.Close();
+            {                
+                MainWindow mainWindow = new MainWindow();// Tworzy okno z listą zadań                
+                mainWindow.Show();// Otwiera nowe okno
+                this.Close();// Zamyka okno logowania
             }
-
-
-
-
         }
     }
 }

@@ -11,10 +11,7 @@ namespace ProjektListaZadan
     /// Tworzy tabelę Kategoria w bazie danych
     /// </summary>
     public class Kategoria
-    {
-        /// <summary>
-        /// Ustawia kolumnę KategoriaId jako Id tabeli
-        /// </summary>
+    { 
         [Key]
         public int KategoriaId { get; set; }
         public string NazwaKategori { get; set; }
